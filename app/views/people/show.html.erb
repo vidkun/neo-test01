@@ -1,8 +1,16 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Names:</strong>
-  <%= @person.names %>
+  <strong>Name:</strong>
+  <%= @person.full_name %>
+</p>
+<p>
+  <strong>Born:</strong>
+  <%= @person.birthday %>
+</p>
+<p>
+  <strong>Occupation:</strong>
+  <%= @person.occupation %>
 </p>
 
 <%= link_to 'Edit', edit_person_path(@person) %> |

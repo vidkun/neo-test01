@@ -7,6 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 people = { "George": "Washington", "Thomas": "Jefferson", "Benjamin": "Franklin", "Susie": "Que", "James": "Madison" }
+count = 0
 
 people.each do |k, v|
   Person.create(names: {fullText: "#{k} #{v}", parts: [{value: "#{k}", type: "Given"}, {value: "#{v}", type: "Surname"}]})

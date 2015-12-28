@@ -12,9 +12,41 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :names %><br>
-    <%= f.text_field :names %>
+    <%= f.label :full_name %><br>
+    <%= f.text_field :full_name %>
+  </div> 
+  <div class="field">
+    <%= f.label :birthday %><br>
+    <%= f.date_field :birthday %>
+  </div>  
+  <div class="field">
+    <%= f.label :occupation %><br>
+    <%= f.text_field :occupation %>
   </div>
+  <div class="form-group">
+    <%= f.fields_for @name do |n| %>
+      <div>
+        <%= n.label :given %><br>
+        <%= n.text_field :given %>
+      </div>
+      <div>
+        <%= n.label :surname %><br>
+        <%= n.text_field :surname %>
+      </div>
+    <% end %>
+  </div>
+  <div class="form-group">
+      <% people_array = Person.all.map { |person| [person.full_name, person.id] } %>
+      <%= label_tag 'Spouse' %><br>
+      <%= select(:person, :spouse, people_array, {include_blank: true} ) %>
+  </div>
+  <div class="form-group">
+    <% people_array = Person.all.map { |person| [person.full_name, person.id] } %>
+    <%= label_tag 'Parent 1' %><br>
+    <%= select(:person, :parents, people_array, {include_blank: true}, {multiple: true} ) %>
+  </div>
+  
+
   <div class="actions">
     <%= f.submit %>
   </div>

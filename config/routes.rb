@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :names
   resources :people
   get 'users/index'
 
