@@ -27,4 +27,25 @@ class Person
       self.names << Name.create(given: name[:given], surname: name[:surname])
     end
   end
+
+  def add_spouse (spouse)
+    unless (spouse.nil? || spouse == "")
+      self.spouse << Person.find(spouse)
+    end
+  end
+
+  def set_gender (gender)
+    unless (gender.nil? || gender == "")
+      self.gender << Gender.find(gender)
+    end
+  end
+
+  def add_parents (parents)
+    unless (parents.nil? || parents == "")
+      parents.each do |parent|
+        next if parent == "" || parent.nil
+        self.parents << Person.find(parent)
+      end
+    end
+  end
 end

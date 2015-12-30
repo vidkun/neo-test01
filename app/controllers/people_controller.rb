@@ -26,12 +26,9 @@ class PeopleController < ApplicationController
   # POST /people
   # POST /people.json
   def create
-    byebug
+    # byebug
     @person = Person.new(person_params.except(:name, :spouse, :parents, :gender))
-    unless (person_params[:name][:given].nil? || person_params[:name][:given] == "")
-      name = Name.create(given: person_params[:name][:given], surname: person_params[:name][:surname])
-      @person.names << name
-    end
+    @person.add_name(person_params[:name])
     unless (person_params[:spouse].nil? || person_params[:spouse] == "")
       spouse = Person.where(id: person_params[:spouse]).first
       @person.spouse << spouse
