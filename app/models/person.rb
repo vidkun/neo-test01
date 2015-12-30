@@ -16,8 +16,15 @@ class Person
   has_many :out, :names, type: :NAMED
   has_many :both, :spouse, type: :MARRIED_TO, model_class: :Person
   has_many :out, :parents, type: :BORN_TO, model_class: :Person
+  has_one :out, :gender, type: :IS_A, model_class: :Gender
 
   # p1.related_to(:n, :rel, rel_length: 2).query.unwind(r: :rel).with('DISTINCT r, n').where(r: { type: 'ParentChild' }).with('DISTINCT n').pluck(:n).each do |ppl|
   #   puts ppl.names["fullText"]
   # end
+
+  def add_name (name)
+    unless (name[:given].nil? || name[:given] == "") && (name[:surname].nil? || name[:surname] == "")
+      self.names << Name.create(given: name[:given], surname: name[:surname])
+    end
+  end
 end

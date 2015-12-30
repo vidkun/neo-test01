@@ -26,24 +26,29 @@ class PeopleController < ApplicationController
   # POST /people
   # POST /people.json
   def create
-    console
-    @person = Person.new(person_params.except(:name, :spouse, :parents))
+    byebug
+    @person = Person.new(person_params.except(:name, :spouse, :parents, :gender))
     unless (person_params[:name][:given].nil? || person_params[:name][:given] == "")
       name = Name.create(given: person_params[:name][:given], surname: person_params[:name][:surname])
       @person.names << name
     end
-    unless (person_params[:spouse] == "")
+    unless (person_params[:spouse].nil? || person_params[:spouse] == "")
       spouse = Person.where(id: person_params[:spouse]).first
       @person.spouse << spouse
     end
-    unless (person_params[:parents[1]] == "")
-      parent_1 = Person.where(id: person_params[:parents[1]]).first
+    unless (person_params[:parents].nil? || person_params[:parents] == "")
+      parent_1 = Person.where(id: person_params[:parents][1]).first
       @person.parents << parent_1
     end
-    unless (person_params[:parents[2]] == "")
-      parent_2 = Person.where(id: person_params[:parents[2]]).first
+    unless (person_params[:parents].nil? || person_params[:parents] == "")
+      parent_2 = Person.where(id: person_params[:parents][2]).first
       @person.parents << parent_2
     end
+    unless (person_params[:gender] == "")
+      gender = Gender.where(id: person_params[:gender]).first
+      @person.gender = gender
+    end
+    @person.full_name = person_params[:name][:given] + " " + person_params[:name][:surname]
     respond_to do |format|
       if @person.save
         format.html { redirect_to @person, notice: 'Person was successfully created.' }
@@ -58,24 +63,32 @@ class PeopleController < ApplicationController
   # PATCH/PUT /people/1
   # PATCH/PUT /people/1.json
   def update
-    unless (person_params[:name][:given].nil? || person_params[:name][:given] == "")
-      name = Name.create(given: person_params[:name][:given], surname: person_params[:name][:surname])
-      @person.names << name
-    end
-    unless (person_params[:spouse] == "")
+    # byebug
+    # unless (person_params[:name][:given].nil? || person_params[:name][:given] == "")
+    #   name = Name.create(given: person_params[:name][:given], surname: person_params[:name][:surname])
+    #   @person.names << name
+    # end
+    @person.add_name(person_params[:name])
+    
+    unless (person_params[:spouse].nil? || person_params[:spouse] == "")
       spouse = Person.where(id: person_params[:spouse]).first
       @person.spouse << spouse
     end
-    unless (person_params[:parents[0]] == "")
-      parent_1 = Person.where(id: person_params[:parents[0]]).first
+    unless (person_params[:parents].nil? || person_params[:parents] == "")
+      parent_1 = Person.where(id: person_params[:parents][1]).first
       @person.parents << parent_1
     end
-    unless (person_params[:parents[1]] == "")
-      parent_2 = Person.where(id: person_params[:parents[1]]).first
+    unless (person_params[:parents].nil? || person_params[:parents] == "")
+      parent_2 = Person.where(id: person_params[:parents][2]).first
       @person.parents << parent_2
     end
+    unless (person_params[:gender].nil? || person_params[:gender] == "")
+      gender = Gender.where(id: person_params[:gender]).first
+      @person.gender = gender
+    end
+    @person.full_name = person_params[:name][:given] + " " + person_params[:name][:surname]
     respond_to do |format|
-      if @person.update(person_params)
+      if @person.update(person_params.except(:name, :spouse, :parents, :gender))
         format.html { redirect_to @person, notice: 'Person was successfully updated.' }
         format.json { render :show, status: :ok, location: @person }
       else
@@ -108,8 +121,7 @@ class PeopleController < ApplicationController
                                      :occupation,
                                      {name: [:given, :surname]},
                                      :spouse,
-                                     :parent_1,
-                                     :parent_2,
-                                     :parents)
+                                     {parents: []},
+                                     :gender)
     end
 end

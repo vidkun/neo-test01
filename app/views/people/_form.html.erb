@@ -36,14 +36,18 @@
     <% end %>
   </div>
   <div class="form-group">
-      <% people_array = Person.all.map { |person| [person.full_name, person.id] } %>
-      <%= label_tag 'Spouse' %><br>
-      <%= select(:person, :spouse, people_array, {include_blank: true} ) %>
+      <% gender_array = Gender.all.map { |gender| [gender.gender, gender.id] } %>
+      <%= label_tag 'Gender' %><br>
+      <%= select(:person, :gender, gender_array, {include_blank: true} ) %>
   </div>
   <div class="form-group">
-    <% people_array = Person.all.map { |person| [person.full_name, person.id] } %>
-    <%= label_tag 'Parent 1' %><br>
-    <%= select(:person, :parents, people_array, {include_blank: true}, {multiple: true} ) %>
+      <% people_array = Person.all.map { |person| [person.full_name, person.id] } %>
+      <%= label_tag 'Spouse' %><br>
+      <%= select(:person, :spouse, people_array, {include_blank: true, include_hidden: false} ) %>
+  </div>
+  <div class="form-group">
+    <%= label_tag 'Parents' %><br>
+    <%= select(:person, :parents, people_array, {include_blank: true, include_hidden: true}, {multiple: true} ) %>
   </div>
   
 

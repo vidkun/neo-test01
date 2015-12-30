@@ -64,6 +64,6 @@ class User
   property :username, type: String
   property :email, type: String
 
-  has_one :out, :self, type: :self, model_class: :Person
+  has_one :out, :self, type: :IS, model_class: :Person
 
 end
